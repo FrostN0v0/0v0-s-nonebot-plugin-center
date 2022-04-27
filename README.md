@@ -9,7 +9,7 @@
 |mcp  |获取Minecraft服务器信息（包含MOTD、玩家数量、在线玩家ID、服务器图标、服务器版本和延迟）  |
 |guess  |明日方舟猜干员屎山版  |
 <p align="center">
- <a href="https://adorable0v0.top"><img src="https://adorable0v0.top/kdl.jpg" width="615" height="894" 
+ <a href="https://adorable0v0.top"><img src="https://adorable0v0.top/kdl.jpg" width="400" height="581" 
 alt="EatKano"></a>
 </p>
 <div align="center">
