@@ -1,42 +1,46 @@
 # Author: FrostN_0V0
-# Date  : 2022/4/12 21:01
+# Date  : 2022/4/27 10:01
 import requests
 from pathlib import Path
-import httpx
+import json
 from nonebot import on_command
 from nonebot.adapters.onebot.v11 import Message,MessageSegment
 from nonebot.rule import to_me
-from selenium.webdriver.chrome.options import Options
 from nonebot.adapters import Bot, Event
-from selenium import webdriver
-import os
 from .config import Config
 from nonebot import require
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import nonebot
-opt = Options()
-opt.add_argument("--headless")
 global_config = nonebot.get_driver().config
 nonebot.logger.info("global_config:{}".format(global_config))
 plugin_config = Config(**global_config.dict())
 nonebot.logger.info("plugin_config:{}".format(plugin_config))
 scheduler = require("nonebot_plugin_apscheduler").scheduler  # type:AsyncIOScheduler
-chromedriver = "C:\Program Files\Google\Chrome\Application\chromedriver"
-os.environ["webdriver.chrome.driver"] = chromedriver
-driver = webdriver.Chrome(chromedriver, chrome_options=opt)
 moyu = on_command("moyu", aliases=set(['摸鱼', '摸鱼日历']), rule=to_me(), priority=1)
+update = on_command("update",aliases=set(['获取更新']),rule=to_me(),priority=1)
 
 
 @moyu.handle()
 async def handle(event: Event):
         img = Path('C:/sk/src/plugins/moyu/img/myrb.png')
         await moyu.send(MessageSegment.image(img))
+@update.handle()
+async def update(event: Event):
+    req = requests
+    url = "https://api.j4u.ink/proxy/remote/moyu.json"
+    a = req.get(url).text
+    imgurl = json.loads(a)['data']['moyu_url']
+    r = requests.get(imgurl)
+    with open('C:/sk/src/plugins/moyu/img/myrb.png', 'wb') as f:
+        f.write(r.content)
+    update_msg="download ok"
+    print(update_msg)
 @scheduler.scheduled_job('cron',hour=7,minute=30)
 async def _():
-    driver.get('http://d.jiek.top/vJfV')
-    # 跳转到新页面
-    imgurl = format(driver.current_url)
-    driver.quit()
+    req = requests
+    url = "https://api.j4u.ink/proxy/remote/moyu.json"
+    a = req.get(url).text
+    imgurl = json.loads(a)['data']['moyu_url']
     r = requests.get(imgurl)
     with open('C:/sk/src/plugins/moyu/img/myrb.png', 'wb') as f:
         f.write(r.content)
